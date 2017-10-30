@@ -46,5 +46,11 @@ class MicropostsInterfaceTest < ActionDispatch::IntegrationTest
 		other_user.microposts.create!(content: "A micropost")
 		get root_path
 		assert_match "1 micropost", response.body
+		log_in_as(@user)
+		get user_path(@user)
+		assert_match "Microposts (#{@user.microposts.count})", response.body
+		other_user2 = users(:user_2)
+		get user_path(other_user)
+		assert_match "Microposts (1)", response.body
 	end
 end
